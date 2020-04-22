@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -11,7 +13,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *    routePrefix="/api",
  *    normalizationContext={"groups"={"user:read"}},
  *    denormalizationContext={"groups"={"user:write"}},
  * )
@@ -60,6 +61,15 @@ class User implements UserInterface
      */
     private $lastName;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ReactionTime", mappedBy="user", orphanRemoval=true)
+     */
+    private $reactionTimes;
+
+    public function __construct()
+    {
+        $this->reactionTimes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -146,6 +156,11 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getFullName(): string
+    {
+        return "$this->firstName $this->lastName";
+    }
+
     /**
      * @see UserInterface
      */
@@ -176,4 +191,35 @@ class User implements UserInterface
 
         return $user;
     } // End function toArray
-}
+
+
+    /**
+     * @return Collection|ReactionTime[]
+     */
+    public function getReactionTimes(): Collection
+    {
+        return $this->reactionTimes;
+    }
+
+    public function addReactionTime(ReactionTime $reactionTime): self
+    {
+        if (!$this->reactionTimes->contains($reactionTime)) {
+            $this->reactionTimes[] = $reactionTime;
+            $reactionTime->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReactionTime(ReactionTime $reactionTime): self
+    {
+        if ($this->reactionTimes->contains($reactionTime)) {
+            $this->reactionTimes->removeElement($reactionTime);
+            // set the owning side to null (unless already changed)
+            if ($reactionTime->getUser() === $this) {
+                $reactionTime->setUser(null);
+            }
+        }
+
+        return $this;
+    }}
