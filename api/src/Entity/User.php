@@ -62,6 +62,7 @@ class User implements UserInterface
     private $lastName;
 
     /**
+     * @Groups({"user:read"})
      * @ORM\OneToMany(targetEntity="App\Entity\ReactionTime", mappedBy="user", orphanRemoval=true)
      */
     private $reactionTimes;
