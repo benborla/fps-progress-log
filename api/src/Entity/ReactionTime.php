@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\CreateReactionTime;
+use App\Entity\Traits\TimestampableTrait;
+use App\Entity\AbstractEntity;
 
 /**
  * @ApiResource(
@@ -18,19 +20,16 @@ use App\Controller\CreateReactionTime;
  *          "controller"=CreateReactionTime::class
  *      }
  *    },
- *    itemOperations={
- *      "get",
- *      "delete",
- *      "patch",
- *    },
  *    normalizationContext={"groups"={"reaction_time:read"}},
  *    denormalizationContext={"groups"={"reaction_time:write"}},
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ReactionTimeRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class ReactionTime
+class ReactionTime extends AbstractEntity
 {
+    use TimestampableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -75,30 +74,6 @@ class ReactionTime
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function updatedTimestamps(): void
-    {
-        $dateTimeNow = new \DateTime('now');
-
-        if ($this->getCreatedAt() === null) {
-            $this->setCreatedAt($dateTimeNow);
-        }
-    }
 
     public function getUser(): ?User
     {

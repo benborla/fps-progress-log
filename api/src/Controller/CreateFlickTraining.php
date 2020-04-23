@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\ReactionTime;
-use App\Handler\ReactionTimeHandler;
+use App\Entity\FlickTraining;
+use App\Handler\FlickTrainingHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class CreateReactionTime extends AbstractController
+class CreateFlickTraining extends AbstractController
 {
     private $handler;
 
-    public function __construct(ReactionTimeHandler $handler)
+    public function __construct(FlickTrainingHandler $handler)
     {
         $this->handler = $handler;
     }
@@ -18,11 +18,11 @@ class CreateReactionTime extends AbstractController
     /**
      * __invoke
      *
-     * @param \App\Entity\ReactionTime $data
+     * @param \App\Entity\FlickTraining $data
      * @access public
-     * @return \App\Entity\ReactionTime
+     * @return void
      */
-    public function __invoke(ReactionTime $data)
+    public function __invoke(FlickTraining $data)
     {
         $this->handler->handle($data, $this->getUser());
 

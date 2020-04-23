@@ -5,12 +5,12 @@ namespace App\Handler;
 use App\Handler\AbstractEntityHandler;
 use App\Entity\User;
 
-class ReactionTimeHandler extends AbstractEntityHandler
+class TrackingTrainingHandler extends AbstractEntityHandler
 {
     /**
      * handle
      *
-     * @param \App\Entity\ReactionTime $entity
+     * @param \App\Entity\TrackingTraining $entity
      * @param \App\Entity\User $currentUser
      * @access public
      * @return void
